@@ -130,6 +130,12 @@
             <p id="slide-script" class="text-white text-2xl leading-loose font-medium tracking-wide">
                 <!-- 原稿がここに挿入されます -->
             </p>
+            </div>
+        </div>
+        <!-- 浮遊ナビゲーションボタン（スマホ用） -->
+        <div class="fixed bottom-32 right-8 flex gap-4 z-[100] md:hidden">
+            <button onclick="prevSlide()" class="w-16 h-16 rounded-full bg-white/80 border-2 border-gray-400 text-gray-700 text-2xl flex items-center justify-center shadow-lg active:scale-95">←</button>
+            <button onclick="nextSlide()" class="w-16 h-16 rounded-full bg-white/80 border-2 border-gray-400 text-gray-700 text-2xl flex items-center justify-center shadow-lg active:scale-95">→</button>
         </div>
     </div>
 
@@ -248,6 +254,16 @@
                 nextSlide();
             } else if (e.key === 'ArrowLeft') {
                 e.preventDefault();
+                prevSlide();
+            }
+        });
+
+        // クリックナビゲーション (画面の右側クリックで進む、左側で戻る)
+        document.querySelector('.slide-area').addEventListener('click', (e) => {
+            const width = window.innerWidth;
+            if (e.clientX > width * 0.4) {
+                nextSlide();
+            } else {
                 prevSlide();
             }
         });
