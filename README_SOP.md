@@ -72,7 +72,7 @@
 ## 6. GitHub へのデプロイ（公開）
 エピソードの追加や原稿の修正が完了したら、変更履歴を保存して本番環境（GitHub Pages）を更新します。
 
-**SNS・Discord 用プレビュー（任意）**: トップ URL に `?series=` / `episode=` を付けても、配信側は同じ `index.html` しか取れないため **OG 画像はエピソードごとに切り替わりません**。**先頭スライドの全景**（タイトル・HTML 本文・挿絵列）をサムネにする手順: 初回のみ `npm install` と `npx playwright install chromium`。ルートで `npm run capture:share`（`share/previews/*.png` を生成）のあと `npm run build:share` で `share/<seriesId>-<episodeId>.html` を更新し、**share URL** を貼る（プレビュー PNG が無いときは従来どおり先頭 `imageSrc` のみ）。公開ホストを変えたときは `KUCHI_DRAFT_SITE_ORIGIN` をセットしてから `build:share`（既定は `README` / `AGENTS` と同じ）。
+**SNS・Discord 用プレビュー（任意）**: トップ URL に `?series=` / `episode=` を付けても、配信側は同じ `index.html` しか取れないため **OG 画像はエピソードごとに切り替わりません**。**先頭スライドの全景**（タイトル・HTML 本文・挿絵列）をサムネにする手順: 初回のみ `npm install` と `npx playwright install chromium`。ルートで `npm run capture:share`（`share/previews/*.png` を生成）のあと `npm run build:share` で `share/<seriesId>-<episodeId>.html` を更新し、**share URL** を貼る（プレビュー PNG が無いときは従来どおり先頭 `imageSrc` のみ）。`build:share` 時に `og:image` へ PNG の内容ハッシュを `?v=` で付け、**Discord 等の古いサムネキャッシュ**を避けます。公開ホストを変えたときは `KUCHI_DRAFT_SITE_ORIGIN` をセットしてから `build:share`（既定は `README` / `AGENTS` と同じ）。
 
 1.  ターミナルを開き、ルートディレクトリで以下のコマンドを実行します：
     ```bash

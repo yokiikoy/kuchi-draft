@@ -11,6 +11,7 @@
  * サイトの公開オリジン:
  *   KUCHI_DRAFT_SITE_ORIGIN=https://yokiikoy.github.io/kuchi-draft
  */
+import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -41,6 +42,17 @@ function absoluteAssetUrl(origin, relPath) {
     const norm = relPath.replace(/^\/+/, "").replace(/\/+/g, "/");
     const parts = norm.split("/").filter(Boolean).map((seg) => encodeURIComponent(seg));
     return `${o}/${parts.join("/")}`;
+}
+
+/** ローカル画像の内容ハッシュを ?v= に付与（Discord 等の og:image キャッシュ対策） */
+function absoluteOgImageUrl(origin, relPathFromRepo) {
+    const abs = path.join(repoRoot, relPathFromRepo);
+    let u = absoluteAssetUrl(origin, relPathFromRepo);
+    if (fs.existsSync(abs)) {
+        const hash = crypto.createHash("sha256").update(fs.readFileSync(abs)).digest("hex").slice(0, 16);
+        u += `?v=${hash}`;
+    }
+    return u;
 }
 
 function viewerUrl(origin, seriesId, episodeId) {
@@ -144,7 +156,7 @@ function main() {
                 continue;
             }
 
-            const ogImageAbs = absoluteAssetUrl(origin, ogImageRel);
+            const ogImageAbs = absoluteOgImageUrl(origin, ogImageRel);
             const viewerAbs = viewerUrl(origin, seriesId, episodeId);
             const description = manifest.description || "";
             const redirectHref = `../?series=${encodeURIComponent(seriesId)}&episode=${encodeURIComponent(episodeId)}`;
