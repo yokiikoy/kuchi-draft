@@ -70,6 +70,8 @@
 | `episodes_list.js` | シリーズ・エピソード一覧と `slides.js` への相対パス。 |
 | `episodes/<シリーズまたは回>/` | エピソード単位。原稿 `草稿1.md`（またはフォルダ内の .md）、`manifest.json`、生成 `slides.js`、画像など。 |
 | `src/build_slides.mjs` | manifest + 原稿 → `slides.js` 生成（`node` で実行）。 |
+| `src/build_share_pages.mjs` | `episodes_list.js` から **SNS 用** `share/<seriesId>-<episodeId>.html` を生成（先頭スライドの `imageSrc` を `og:image` に。`npm run build:share`）。 |
+| `share/` | 生成物。Discord 等では **share URL** を貼る（`?series=` 付きトップでは OG が共通のまま）。 |
 | `src/generate_images.mjs` | `manifest.json` の `imgDesc` + ベースプロンプトで **Imagen 4 Fast** 画像生成（`GEMINI_API_KEY`・追加 npm 依存なし）。 |
 | `src/serve.mjs` | ローカルプレビュー用の静的サーバ（`node` のみ・既定ポート 8765）。 |
 | `DESIGN_GUIDE.md` | スライド HTML・CSS クラスのリファレンス。 |
@@ -98,7 +100,7 @@
    node src/serve.mjs
    ```
    既定は `http://127.0.0.1:8765/`。初期シリーズ・エピソードは URL クエリで指定可能: `?series=<seriesId>`、任意で `&episode=<ep.id>`（値は `episodes_list.js` の `seriesId` / 各エピソードの `id` と一致）。クエリなしのときは URL は書き換えない。ドロップダウン変更時は `history.replaceState` でクエリを同期する。
-5. **成果物**: 各エピソードフォルダの `slides.js`（生成物。原稿・manifest と整合を保つ）。併せて `assets/app.css`（スタイル変更時）。
+5. **成果物**: 各エピソードフォルダの `slides.js`（生成物。原稿・manifest と整合を保つ）。併せて `assets/app.css`（スタイル変更時）。**SNS 用** `share/*.html` は `npm run build:share` で再生成してコミット（`episodes_list.js` や先頭スライド画像を変えたとき）。
 
 ---
 
@@ -130,3 +132,4 @@
 - **2026-04-05**: 対象読者を**話者＋リスナー・非同期閲覧**に明記。`DESIGN_GUIDE.md` §8 を「厳格な短文化」から**文字量推奨レンジ（図表・アイコン活用）**へ更新。`README.md`・`README_SOP.md`・本ファイルのスコープ記述を同期。
 - **2026-04-05**: スライド画像のバッチ生成用に `src/generate_images.mjs`。**Gemini API（Imagen 4 Fast）**、`--dry-run` / `--write-manifest` / `--skip-existing` / `--max-api-calls**。`.env` は `.gitignore`。手順は `README_SOP.md` §5。
 - **2026-04-05**: Imagen ベースプロンプトで**画像内の文字を原則禁止**（`imgDesc` で明示した場合のみ。記号のみ可）。`DESIGN_GUIDE.md`・`README_SOP.md` に運用を追記。
+- **2026-04-05**: **OG / 共有**: `index.html` にデフォルトの Open Graph・Twitter カード。エピソード別サムネは `src/build_share_pages.mjs`（`npm run build:share`）で `share/*.html` を生成し、Discord 等にはその URL を貼る。

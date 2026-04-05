@@ -72,6 +72,8 @@
 ## 6. GitHub へのデプロイ（公開）
 エピソードの追加や原稿の修正が完了したら、変更履歴を保存して本番環境（GitHub Pages）を更新します。
 
+**SNS・Discord 用プレビュー（任意）**: トップ URL に `?series=` / `episode=` を付けても、配信側は同じ `index.html` しか取れないため **OG 画像はエピソードごとに切り替わりません**。エピソードの**先頭スライド画像**をサムネにしたいときは、ルートで `npm run build:share` を実行して `share/<seriesId>-<episodeId>.html` を生成・コミットし、**その share URL** を貼る（開くと自動で本番ビューへリダイレクト）。公開 URL のホストを変えたときは `KUCHI_DRAFT_SITE_ORIGIN` をセットしてから再実行（既定は `README` / `AGENTS` と同じ `yokiikoy.github.io/kuchi-draft`）。
+
 1.  ターミナルを開き、ルートディレクトリで以下のコマンドを実行します：
     ```bash
     git add .
